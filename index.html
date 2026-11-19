@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Galery Mobil</title>
+  <style>
+    :root { --blue:#2563eb; --ink:#172033; --muted:#6b7280; --line:#e5e7eb; --bg:#f6f8fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; color:var(--ink); background:var(--bg); }
+    header { background:#fff; border-bottom:1px solid var(--line); }
+    .header-inner,.container { max-width:1120px; margin:auto; padding:0 24px; }
+    .header-inner { height:72px; display:flex; align-items:center; justify-content:space-between; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px; }
+    .brand-mark { width:40px; height:40px; display:grid; place-items:center; border-radius:12px; background:var(--blue); color:#fff; }
+    .hero { padding:38px 0 22px; }
+    h1 { margin:0 0 8px; font-size:32px; }
+    .hero p { margin:0; color:var(--muted); }
+    .tabs { display:flex; gap:6px; background:#e9edf4; padding:5px; border-radius:12px; width:max-content; margin-bottom:20px; }
+    .tab { border:0; background:transparent; padding:10px 18px; border-radius:8px; cursor:pointer; color:#64748b; font-weight:700; }
+    .tab.active { background:#fff; color:var(--blue); box-shadow:0 2px 8px rgba(15,23,42,.08); }
+    .panel { display:none; }
+    .panel.active { display:grid; grid-template-columns:minmax(280px,420px) 1fr; gap:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:24px; box-shadow:0 8px 24px rgba(15,23,42,.04); }
+    label { display:block; margin:16px 0 7px; font-size:14px; font-weight:700; }
+    select,input { width:100%; height:48px; border:1px solid #d8dde6; border-radius:10px; padding:0 12px; background:#fff; color:var(--ink); font-size:15px; }
+    button.primary { width:100%; height:48px; margin-top:20px; border:0; border-radius:10px; background:var(--blue); color:#fff; font-weight:800; cursor:pointer; }
+    .result-empty { min-height:260px; display:grid; place-items:center; text-align:center; color:var(--muted); }
+    .result-empty strong { display:block; color:#475569; margin-bottom:6px; }
+    .error { color:#dc2626; background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; padding:10px 12px; margin-top:12px; display:none; }
+    .error.show { display:block; }
+    .summary-row { display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid #edf0f4; }
+    .summary-row:last-child { border:0; }
+    .summary-row.total { margin-top:8px; padding:16px; border-radius:10px; background:#eff6ff; color:#1d4ed8; font-size:18px; font-weight:800; }
+    .order-row { display:grid; grid-template-columns:1.2fr 1fr 80px 40px; gap:8px; margin-bottom:8px; }
+    .remove { height:48px; border:1px solid #fecdd3; background:#fff1f2; color:#dc2626; border-radius:10px; cursor:pointer; }
+    .add { margin-top:8px; background:#fff; color:var(--blue); border:1px solid #bfdbfe; border-radius:10px; height:42px; cursor:pointer; }
+    table { width:100%; border-collapse:collapse; }
+    th,td { text-align:left; padding:12px 10px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:13px; }
+    .grand { text-align:right; font-size:18px; font-weight:800; margin-top:16px; color:#1d4ed8; }
+    @media (max-width:760px) {
+      .header-inner { height:64px; }
+      .hero { padding:24px 0 16px; }
+      h1 { font-size:26px; }
+      .panel.active { grid-template-columns:1fr; }
+      .order-row { grid-template-columns:1fr 1fr 70px 40px; }
+      .order-row select { font-size:13px; }
+      .card { padding:18px; }
+    }
+  </style>
+</head>
+<body>
+  <header><div class="header-inner"><div class="brand"><span class="brand-mark">GM</span> Galery Mobil</div></div></header>
+  <main class="container">
+    <section class="hero"><h1>Temukan mobil impian Anda</h1><p>Pilih varian dan hitung estimasi pembelian dengan mudah.</p></section>
+    <div class="tabs">
+      <button class="tab active" data-tab="harga">Hitung Harga</button>
+      <button class="tab" data-tab="pesanan">Pesanan</button>
+    </div>
+
+    <section id="harga-panel" class="panel active">
+      <div class="card">
+        <label for="mobil">Mobil</label><select id="mobil"></select>
+        <label for="tipe">Type</label><select id="tipe"></select>
+        <label for="jumlah">Jumlah unit</label><input id="jumlah" type="number" min="1" max="10" value="1">
+        <div id="harga-error" class="error"></div>
+        <button class="primary" id="hitung">Hitung Harga</button>
+      </div>
+      <div class="card" id="harga-result"><div class="result-empty"><div><strong>Belum ada hasil</strong>Pilih mobil, type, dan jumlah unit.</div></div></div>
+    </section>
+
+    <section id="pesanan-panel" class="panel">
+      <div class="card">
+        <div id="order-list"></div>
+        <button class="add" id="add-order" type="button">+ Tambah mobil</button>
+        <div id="pesanan-error" class="error"></div>
+        <button class="primary" id="buat-pesanan">Buat Pesanan</button>
+      </div>
+      <div class="card" id="pesanan-result"><div class="result-empty"><div><strong>Belum ada pesanan</strong>Tambahkan mobil ke daftar pesanan.</div></div></div>
+    </section>
+  </main>
+
+  <script>
+    let katalog = [];
+    const rupiah = n => "Rp " + new Intl.NumberFormat("id-ID").format(n);
+
+    async function loadCatalog() {
+      katalog = await (await fetch("/api/katalog")).json();
+      populateCars();
+      updateTypes();
+      addOrder();
+    }
+
+    function populateCars() {
+      const names = [...new Set(katalog.map(x => x.mobil))];
+      document.querySelector("#mobil").innerHTML = names.map(n => `<option>${n}</option>`).join("");
+    }
+    function updateTypes() {
+      const name = document.querySelector("#mobil").value;
+      const types = katalog.filter(x => x.mobil === name);
+      document.querySelector("#tipe").innerHTML = types.map(x => `<option>${x.tipe}</option>`).join("");
+    }
+    function populateSelect(select, cars) {
+      const names = [...new Set(katalog.map(x => x.mobil))];
+      select.innerHTML = names.map(n => `<option>${n}</option>`).join("");
+      if (cars) select.value = cars;
+    }
+    function updateOrderTypes(row) {
+      const mobil = row.querySelector(".order-mobil").value;
+      const select = row.querySelector(".order-tipe");
+      select.innerHTML = katalog.filter(x => x.mobil === mobil).map(x => `<option>${x.tipe}</option>`).join("");
+    }
+    function addOrder() {
+      const row = document.createElement("div");
+      row.className = "order-row";
+      row.innerHTML = `<select class="order-mobil"></select><select class="order-tipe"></select><input class="order-jumlah" type="number" min="1" max="10" value="1"><button class="remove" type="button">×</button>`;
+      populateSelect(row.querySelector(".order-mobil"));
+      updateOrderTypes(row);
+      row.querySelector(".order-mobil").addEventListener("change", () => updateOrderTypes(row));
+      row.querySelector(".remove").addEventListener("click", () => { if (document.querySelectorAll(".order-row").length > 1) row.remove(); });
+      document.querySelector("#order-list").append(row);
+    }
+
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+      tab.classList.add("active");
+      document.querySelector(`#${tab.dataset.tab}-panel`).classList.add("active");
+    }));
+    document.querySelector("#mobil").addEventListener("change", updateTypes);
+
+    document.querySelector("#hitung").addEventListener("click", async () => {
+      const error = document.querySelector("#harga-error");
+      error.classList.remove("show");
+      const params = new URLSearchParams({ mobil: document.querySelector("#mobil").value, tipe: document.querySelector("#tipe").value, jumlah: document.querySelector("#jumlah").value });
+      const response = await fetch("/api/harga?" + params);
+      const data = await response.json();
+      if (!response.ok) {
+        error.textContent = data.detail || "Terjadi kesalahan";
+        error.classList.add("show");
+        return;
+      }
+      document.querySelector("#harga-result").innerHTML = `
+        <h3>Hasil Perhitungan</h3>
+        <div class="summary-row"><span>Mobil & Type</span><strong>${data.mobil} ${data.tipe}</strong></div>
+        <div class="summary-row"><span>Harga satuan</span><strong>${rupiah(data.harga_satuan)}</strong></div>
+        <div class="summary-row"><span>Jumlah</span><strong>${data.jumlah} unit</strong></div>
+        <div class="summary-row"><span>Subtotal</span><strong>${rupiah(data.subtotal)}</strong></div>
+        <div class="summary-row"><span>Diskon armada</span><strong>${rupiah(data.diskon)}</strong></div>
+        <div class="summary-row"><span>Sisa stok</span><strong>${data.stok_tersisa} unit</strong></div>
+        <div class="summary-row total"><span>Total harga</span><span>${rupiah(data.total)}</span></div>`;
+    });
+
+    document.querySelector("#add-order").addEventListener("click", addOrder);
+    document.querySelector("#buat-pesanan").addEventListener("click", async () => {
+      const items = [...document.querySelectorAll(".order-row")].map(row => ({
+        mobil: row.querySelector(".order-mobil").value,
+        tipe: row.querySelector(".order-tipe").value,
+        jumlah: Number(row.querySelector(".order-jumlah").value)
+      }));
+      const error = document.querySelector("#pesanan-error");
+      error.classList.remove("show");
+      const response = await fetch("/api/pesanan", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ items }) });
+      const data = await response.json();
+      if (!response.ok) {
+        error.textContent = data.detail || "Terjadi kesalahan";
+        error.classList.add("show");
+        return;
+      }
+      const rows = data.items.map(x => `<tr><td>${x.mobil}</td><td>${x.tipe}</td><td>${x.jumlah}</td><td>${rupiah(x.total)}</td></tr>`).join("");
+      document.querySelector("#pesanan-result").innerHTML = `<h3>Ringkasan Pesanan</h3><table><thead><tr><th>Mobil</th><th>Type</th><th>Unit</th><th>Total</th></tr></thead><tbody>${rows}</tbody></table><div class="grand">Total Pesanan: ${rupiah(data.total_pesanan)}</div>`;
+    });
+
+    loadCatalog();
+  </script>
+</body>
+</html>
