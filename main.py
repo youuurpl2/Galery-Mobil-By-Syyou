@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
 
-app = FastAPI(title="Galery Mobil")
+app = FastAPI(title="PUNYA SYOU LIAN")
 
 KATALOG = [
     {"mobil": "Toyota Avanza", "tipe": "E", "harga": 245000000, "stok": 5},

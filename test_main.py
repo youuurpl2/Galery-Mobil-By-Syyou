@@ -69,6 +69,8 @@ def test_homepage():
     response = client.get("/")
     assert response.status_code == 200
     assert "<html" in response.text.lower()
+    assert "<title>PUNYA SYOU LIAN</title>" in response.text
+    assert ">PSL</span> PUNYA SYOU LIAN</div>" in response.text
 
 
 def test_buat_pesanan():

@@ -1,4 +1,4 @@
-# SPEC - Galery Mobil
+# SPEC - PUNYA SYOU LIAN
 
 ## Tujuan
 Aplikasi web untuk memilih mobil, memilih type, menghitung harga, diskon, total, dan stok. Mendukung perhitungan satu mobil serta pesanan beberapa mobil.

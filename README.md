@@ -1,6 +1,6 @@
-# Galery Mobil
+# PUNYA SYOU LIAN
 
-Aplikasi web jual beli mobil berbasis FastAPI dan halaman HTML responsif.
+Aplikasi web PUNYA SYOU LIAN untuk jual beli mobil, berbasis FastAPI dan halaman HTML responsif.
 
 ## Menjalankan Lokal
 
@@ -16,13 +16,13 @@ Buka `http://127.0.0.1:8000`.
 Build image:
 
 ```bash
-docker build -t galery-mobil .
+docker build -t punya-syou-lian .
 ```
 
 Jalankan container:
 
 ```bash
-docker run -d --name galery-app -p 8000:8000 galery-mobil
+docker run -d --name punya-syou-lian -p 8000:8000 punya-syou-lian
 ```
 
 Jalankan smoke test:
